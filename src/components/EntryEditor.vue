@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import EmojiField from "@/components/EmojiField.vue";
 import ArrowCircleRight from "@/assets/icons/arrow-circle-right.svg";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, inject } from "vue";
+import { userInjectionKey } from "@/injectionKeys";
+
 import type Emoji from "@/types/Emoji";
 import type Entry from "@/types/Entry";
 
@@ -10,6 +12,7 @@ const text = ref("");
 const emoji = ref<Emoji | null>(null);
 const charCount = computed(() => text.value.length);
 const maxChars = 280;
+const user = inject(userInjectionKey);
 
 // template refs
 const textarea = ref<HTMLTextAreaElement | null>(null);
@@ -50,7 +53,7 @@ const handleSubmit = () => {
     <textarea
       :value="text"
       ref="textarea"
-      placeholder="New Journal Entry for danielkelly_io"
+      :placeholder="`New Journal Entry for ${user?.username || 'anonymouse'}`"
       @keyup="handleTextInput"
     ></textarea>
     <EmojiField v-model="emoji" />
